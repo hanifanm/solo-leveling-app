@@ -36,8 +36,26 @@ $('#pu-button').click(function() {
   reload()
 })
 
+$('#pu-sub-button').click(function() {
+  todayData.puCount--
+  if(todayData.puCount < 0) {
+    todayData.puCount = 0
+  }
+  save()
+  reload()
+})
+
 $('#su-button').click(function() {
   todayData.suCount++
+  save()
+  reload()
+})
+
+$('#su-sub-button').click(function() {
+  todayData.suCount--
+  if(todayData.suCount < 0) {
+    todayData.suCount = 0
+  }
   save()
   reload()
 })
