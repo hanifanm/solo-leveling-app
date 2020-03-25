@@ -24,8 +24,11 @@ if(!todayData) {
 
 // Reload display
 function reload() {
-  $('#pu-count').text(todayData.puTarget - todayData.puCount)
-  $('#su-count').text(todayData.suTarget - todayData.suCount)
+  $('#pu-count').text(todayData.puCount)
+  $('#su-count').text(todayData.suCount)
+
+  $('#pu-target').text(todayData.puTarget)
+  $('#su-target').text(todayData.suTarget)
 }
 reload()
 
