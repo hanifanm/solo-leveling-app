@@ -58,7 +58,8 @@ let calendarClickCounter = 0
 let lastDateKey = 0
 function handleToggleCalendar(dateKey) {
   if(dateKey === lastDateKey) calendarClickCounter++
-  else calendarClickCounter = 0
+  else calendarClickCounter = 1
+  lastDateKey = dateKey
   if (calendarClickCounter > 10) {
     calendarClickCounter = 0
     if (calendarData[dateKey]) {
