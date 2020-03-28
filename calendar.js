@@ -54,15 +54,20 @@ function loadCalendarUI() {
 loadCalendarUI()
 
 // Create click event
-
+let calendarClickCounter = 0
+let lastDateKey = 0
 function handleToggleCalendar(dateKey) {
-  if (prompt("Are you sure? Enter password:") === "sure") {
+  if(dateKey === lastDateKey) calendarClickCounter++
+  else calendarClickCounter = 0
+  if (calendarClickCounter > 10) {
+    calendarClickCounter = 0
     if (calendarData[dateKey]) {
       calendarData[dateKey] = false
     } else {
       calendarData[dateKey] = true
     }
     loadCalendarUI()
+    saveCalendar()
   }
 }
 
