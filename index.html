@@ -20,47 +20,12 @@
 
   <div class="container text-center custom-container">
     <h1>Solo Leveling</h1>
-    <br/>
-    <div class="row row-section">
-      <div class="col-6 col-section">
-        <h2>PU</h2>
-        <div class="counter-container">
-            <span id="pu-count" class="counter-text">0</span>/
-            <i id="pu-target" class="target-text">0</i>
-        </div>
-        <button id="pu-button" type="button" class="btn btn-primary count-button">
-          +
-        </button>
-        <button id="pu-sub-button" type="button" class="btn btn-danger sub-button">
-          -
-        </button>
-      </div>
-      <div class="col-6 col-section">
-        <h2>SU</h2>
-        <div class="counter-container">
-            <span id="su-count" class="counter-text">0</span>/
-            <i id="su-target" class="target-text">0</i>
-        </div>
-        <button id="su-button" type="button" class="btn btn-primary count-button">
-          +
-        </button>
-        <button id="su-sub-button" type="button" class="btn btn-danger sub-button">
-          -
-        </button>
-      </div>
+    <br />
+    <br />
+    <br />
+    <div id='board'>
     </div>
-    <a href="./calendar.html" type="button" class="btn btn-link">
-      Calendar
-    </a>
   </div>
-
-
-
-
-
-
-
-
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -75,8 +40,81 @@
     crossorigin="anonymous"></script>
 
   <!-- Custom JavaScript -->
-  <script src="util.js"></script>
-  <script src="app.js"></script>
+  <script>
+
+    const EXCERCISE_STORATE = 'ExcerciseStorage'
+    const titles = ['Push Up', 'Sit Up', 'Squat', 'Jump', 'Plank']
+
+    let dataString = localStorage.getItem(EXCERCISE_STORATE)
+    let data = dataString ? JSON.parse(dataString) : [
+      // [18412, [10, 10, 10, 10, 10]],
+      // [18411, [9, 9, 9, 9, 9]],
+      // [18410, [8, 8, 8, 8, 8]],
+      // [18409, [7, 7, 7, 7, 7]],
+      // [18408, [6, 6, 6, 6, 6]],
+      // [18407, [5, 5, 5, 5, 5]],
+      // [18406, [4, 4, 4, 4, 4]],
+      // [18405, [3, 3, 3, 3, 3]],
+    ]
+
+    /*
+      [
+        [key, push up, sit up, squat, jump, plank]
+      ]
+    */
+
+    let todayKey = Math.floor(new Date() / 8.64e7)
+    let todayData = data.find(d => d[0] === todayKey)
+    if (!todayData) {
+      todayData = [todayKey, [...titles.map(() => 0)]]
+      data.push(todayData)
+      save()
+    }
+
+    let usedData = data.filter(d => d[0] >= todayKey - 7 && d[0] < todayKey)
+    let sumData = usedData.reduce(
+      (sum, curr) => {
+        let sumcurr = []
+        for (let i = 0; i < sum.length; i++) {
+          sumcurr[i] = sum[i] + curr[1][i]
+        }
+        return sumcurr
+      },
+      [...titles.map(() => 0)]
+    )
+    let averageData = sumData.map(sum => sum / 7)
+    reload()
+
+    function reload() {
+      $('#board').empty()
+      titles.map((title, index) => {
+        $('#board').append(`
+          <div class="row d-flex align-items-center px-4 mb-5">
+            <span class="col-5 text-left"><b>${title}</b></span>
+            <button type="button" class="btn btn-danger col-2" onclick="update(${index}, -1)">-</button>
+            <span class="col-3">${todayData[1][index]}/${averageData[index]}</span>
+            <button type="button" class="btn btn-info col-2" onclick="update(${index}, 1)">+</button>
+          </div>
+        `)
+      })
+    }
+
+    function update(index, val) {
+      todayData[1][index] += val
+      if(todayData[1][index] < 0) {
+      todayData[1][index] = 0
+      }
+      save()
+      reload()
+    }
+
+    // Save Data
+    function save() {
+      let dataStr = JSON.stringify(data)
+      localStorage.setItem(EXCERCISE_STORATE, dataStr)
+    }
+
+  </script>
 </body>
 
 </html>
