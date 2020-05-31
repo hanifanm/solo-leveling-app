@@ -43,7 +43,7 @@
   <script>
 
     const EXCERCISE_STORATE = 'ExcerciseStorage'
-    const titles = ['Push Up', 'Sit Up', 'Squat', 'Jump', 'Plank']
+    const titles = ['Push Up', 'Sit Up', 'Squat', 'Jump (x10)', 'Plank (x10s)']
 
     let dataString = localStorage.getItem(EXCERCISE_STORATE)
     let data = dataString ? JSON.parse(dataString) : [
@@ -82,7 +82,7 @@
       },
       [...titles.map(() => 0)]
     )
-    let averageData = sumData.map(sum => sum / 7)
+    let averageData = sumData.map(sum => Math.floor(sum / 7))
     reload()
 
     function reload() {
